@@ -1,5 +1,5 @@
 import React from 'react';
-import BibUploader from './BibUploader';
+import BibUploader from './components/BibUploader';
 import './App.css';
 
 function Layout() {

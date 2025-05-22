@@ -241,8 +241,8 @@
       </div>
     </div>
 
-    <!-- right after your <div class="actions">…</div> -->
-<div id="jsonOutput" style="white-space: pre-wrap; background:#f6f8fa; padding:10px; margin-top:20px; border:1px solid #ccc;"></div>
+    <div id="jsonOutput" style="display:none; white-space: pre-wrap; background:#f6f8fa; 
+    padding:10px; margin-top:20px; border:1px solid #ccc;"></div>
 
 
   </div>
@@ -276,7 +276,9 @@
       const data = await resp.json();
       const out = document.getElementById('jsonOutput');
       out.textContent = JSON.stringify(data, null, 2);
-      
+      out.style.display = 'block';
+      out.textContent    = JSON.stringify(data, null, 2);
+
     } catch (err) {
       alert('Upload-Fehler: ' + err.message);
     }

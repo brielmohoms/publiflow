@@ -8,14 +8,17 @@ export default function BibUploader({ onParsed }) {
     setError(''); setLoading(true);
     try {
       const text = await file.text();                      // Read file
+
       const res  = await fetch('/api/upload', {            // POST to backend
         method: 'POST',
         headers: { 'Content-Type': 'text/plain' },
         body: text
       });
+
       if (!res.ok) throw new Error(res.statusText);
       const json = await res.json();                       // Get JSON back
       onParsed(json);                                      // Pass up to parent
+      
     } catch (e) {
       setError('Upload fehlgeschlagen: ' + e.message);
     } finally {

@@ -2,12 +2,9 @@
 const bibtexParse = require('bibtex-parse-js');
 
 module.exports = {
-  /**
-   * parseBib:
-   *   - bibText: raw contents of a .bib file
-   *   - returns: Promise resolving to an array of normalized entry objects
-   */
+  
   parseBib: async (bibText) => {
+    
     // Use bibtex-parse-js to convert the raw text into a JS array
     const rawEntries = bibtexParse.toJSON(bibText);
 

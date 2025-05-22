@@ -247,21 +247,20 @@
 
   </div>
 
-<!-- you never added this input -->
 <input type="file" id="bibInput" accept=".bib" style="display:none" />
 
-<!-- …at the very end of your <body>… -->
 <script>
-  // 1) Grab references
+
+  // Grab references
   const importCard = document.getElementById('importCard');
   const bibInput   = document.getElementById('bibInput');
 
-  // 2) When the card is clicked, open the file picker
+  // When the card is clicked, open the file picker
   importCard.addEventListener('click', () => {
     bibInput.click();
   });
 
-  // 3) When a file is selected, read & POST it
+  // When a file is selected, read & POST it
   bibInput.addEventListener('change', async (evt) => {
     const file = evt.target.files[0];
     if (!file) return;
@@ -275,7 +274,7 @@
       if (!resp.ok) throw new Error(resp.statusText);
       const data = await resp.json();
       const out = document.getElementById('jsonOutput');
-      out.textContent = JSON.stringify(data, null, 2);
+      
       out.style.display = 'block';
       out.textContent    = JSON.stringify(data, null, 2);
 

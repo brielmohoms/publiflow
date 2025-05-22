@@ -15,10 +15,8 @@ function BibUploader() {
     }
 
     try {
-      // 🔁 Lire le contenu texte du fichier sélectionné
       const bibText = await file.text();
 
-      // 🔼 Envoyer le texte brut au backend
       const response = await fetch('http://localhost:3001/api/upload', {
         method: 'POST',
         headers: {
@@ -31,7 +29,6 @@ function BibUploader() {
         throw new Error(`Upload fehlgeschlagen: ${response.statusText}`);
       }
 
-      // ✅ Réponse JSON attendue du backend
       const result = await response.json();
       setJsonData(result);
     } catch (error) {
@@ -40,15 +37,32 @@ function BibUploader() {
     }
   };
 
+  const handleClear = () => {
+    setJsonData(null);
+    setFile(null);
+  };
+
   return (
-    <div>
+    <div style={{ marginTop: '10px' }}>
       <input type="file" accept=".bib" onChange={handleFileChange} />
-      <button onClick={handleUpload}>Hochladen</button>
+
+       <button type="button" onClick={handleUpload}>Hochladen</button>
 
       {jsonData && (
-        <div>
+        <div style={{
+          backgroundColor: '#f0f0f0',
+          padding: '10px',
+          borderRadius: '5px',
+          marginTop: '15px',
+          border: '1px solid #ccc'
+        }}>
           <h4>Antwort vom Server:</h4>
-          <pre>{JSON.stringify(jsonData, null, 2)}</pre>
+          <pre style={{ maxHeight: '300px', overflowY: 'auto' }}>
+            {JSON.stringify(jsonData, null, 2)}
+          </pre>
+          <button onClick={handleClear} style={{ marginTop: '10px' }}>
+            JSON löschen
+          </button>
         </div>
       )}
     </div>
@@ -56,4 +70,3 @@ function BibUploader() {
 }
 
 export default BibUploader;
-

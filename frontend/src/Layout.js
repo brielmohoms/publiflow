@@ -1,8 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import BibUploader from './BibUploader';
 import './App.css';
 
 function Layout() {
+  const [openSection, setOpenSection] = useState(null); // au lieu de useState dans la boucle
+
+  const toggleSection = (num) => {
+    setOpenSection((prev) => (prev === num ? null : num));
+  };
+
   return (
     <div className="container">
       <div className="sidebar">
@@ -11,14 +17,29 @@ function Layout() {
         <div className="search-box">
           <input type="text" placeholder="Suchen…" />
         </div>
+
         <ul className="list">
           {[1, 2, 3].map((num) => (
             <li className="list-item" key={num}>
-              <details>
-                <summary>
-                  Import {num}
-                  <button className="edit-btn">✏️</button>
-                </summary>
+              <div
+                onClick={() => toggleSection(num)}
+                style={{
+                  cursor: 'pointer',
+                  fontWeight: 'bold',
+                  padding: '10px',
+                  background: '#fafafa',
+                  border: '1px solid #ccc',
+                  borderRadius: '4px',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
+                }}
+              >
+                Import {num}
+                <button className="edit-btn">✏️</button>
+              </div>
+
+              {openSection === num && (
                 <div className="details-content">
                   <form>
                     <label>Dokumenttyp</label>
@@ -72,11 +93,11 @@ function Layout() {
                     <input type="number" placeholder="Seitenzahl" />
                   </form>
                 </div>
-              </details>
+              )}
             </li>
           ))}
         </ul>
-</div>
+      </div>
 
       <div className="actions">
         <div className="card">
@@ -94,4 +115,3 @@ function Layout() {
 }
 
 export default Layout;
-

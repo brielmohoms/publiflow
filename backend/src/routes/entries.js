@@ -26,3 +26,5 @@ router.put('/entries/:id', (req, res) => {
   res.json(entry);                       // geändertes Objekt zurück
 });
 
+module.exports = router;
+

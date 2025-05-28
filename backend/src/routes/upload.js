@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const parserService = require('../services/parserservice'); // oder keine Ahnung wie das heißt
+const parserService = require('../services/parserService'); // oder keine Ahnung wie das heißt
 
 // POST /api/upload
 router.post('/upload', async (req, res, next) => {

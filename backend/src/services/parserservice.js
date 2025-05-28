@@ -1,36 +1,21 @@
-const fs = require('fs');
+// Load the BibTeX parser library
 const bibtexParse = require('bibtex-parse-js');
 
-function convertBibtexToJson(inputFile, outputFile) {
-    try {
-        if (!fs.existsSync(inputFile)) {
-            throw new Error('Input file does not exist.');
-        }
-
-        const bibtexStr = fs.readFileSync(inputFile, 'utf8');
-
-        // ✅ Parse le contenu avec bibtexParse.toJSON
-        const parsed = bibtexParse.toJSON(bibtexStr);
-
-        fs.writeFileSync(outputFile, JSON.stringify(parsed, null, 2));
-        console.log('✅ JSON file created:', outputFile);
-    } catch (error) {
-        console.error('❌ Error:', error.message);
-    }
-}
-
-// ✅ Fonction utilisée par upload.js pour traiter req.body (du texte .bib)
-async function parseBib(bibText) {
-    try {
-        const parsed = bibtexParse.toJSON(bibText);
-        return parsed;
-    } catch (err) {
-        throw new Error('BibTeX parsing failed: ' + err.message);
-    }
-}
-
 module.exports = {
-    convertBibtexToJson,
-    parseBib
-};
+  
+  parseBib: async (bibText) => {
+    
+    // Use bibtex-parse-js to convert the raw text into a JS array
+    const rawEntries = bibtexParse.toJSON(bibText);
 
+    // Map each parsed entry to your desired shape
+    return rawEntries.map((item, index) => ({
+      id: index + 1,                         
+      type: item.entryType || '',           
+      key: item.citationKey || '',           
+      title: item.entryTags.title || '',    
+      author: item.entryTags.author || '',   
+      year: item.entryTags.year || '',    
+    }));
+  }
+};

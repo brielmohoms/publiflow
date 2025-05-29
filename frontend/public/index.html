@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Publikationen</title>
   <style>
-    * { 
-      box-sizing: border-box; 
+    * {
+      box-sizing: border-box;
     }
 
     body {
@@ -29,11 +29,6 @@
       border-radius: 8px;
       display: flex;
       flex-direction: column;
-    }
-
-    .sidebar h1 {
-      margin: 0 0 5px;
-      font-size: 1.5em;
     }
 
     .sidebar p {
@@ -147,143 +142,53 @@
       font-size: 0.9em;
       color: #333;
     }
+
+    /* Zone React container */
+    .react-container {
+      flex: 2;
+      margin-left: 20px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      overflow-y: auto;
+    }
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <div class="sidebar">
-      <h1>Publikationen</h1>
-      <p>Hallo, Prof. Altmeyer</p>
-      <div class="search-box">
-        <input type="text" placeholder="Suchen…">
-      </div>
-      <ul class="list">
-        <li class="list-item">
-          <details>
-            <summary>
-              Import 1
-              <button class="edit-btn">✏️</button>
-            </summary>
+<div class="container">
 
-            <div class="details-content">
-              <form>
-                <label>Dokumenttyp</label>
-                <select>
-                  <option>Wissenschaftlicher Artikel</option>
-                  <option>Dissertation</option>
-                  <option>Buch (Monographie)</option>
-                </select>
-                
-                <label>Datei hochladen</label>
-                <input type="file">
-
-                <label>Kommentar</label>
-                <textarea rows="2"></textarea>
-                
-                <label>Nachname</label>
-                <input type="text" placeholder="Nachname">
-
-                <label>Vorname</label>
-                <input type="text" placeholder="Vorname">
-
-                <label>E-Mail-Adresse</label>
-                <input type="email" placeholder="email@example.com">
-                
-                <label>Sprache</label>
-                <select>
-                  <option>Deutsch</option>
-                  <option>Englisch</option>
-                  <option>Andere</option>
-                </select>
-                
-                <label>Haupttitel</label>
-                <input type="text" placeholder="Titel">
-
-                <label>Abstract</label>
-                <textarea rows="3"></textarea>
-                
-                <label>Autor*innen</label>
-                <input type="text" placeholder="z. B. Meyer, Max">
-                
-                <label>Jahr der Fertigstellung</label>
-                <input type="text" placeholder="JJJJ">
-
-                <label>Datum Online-Veröffentlichung</label>
-                <input type="date">
-                
-                <label>Institution</label>
-                <input type="text" placeholder="Institution">
-
-                <label>Seitenzahl</label>
-                <input type="number" placeholder="Seitenzahl">
-              </form>
-            </div>
-
-          </details>
-        </li>
-        
-        <li class="list-item"><details><summary>Import 2 <button class="edit-btn">✏️</button></summary></details></li>
-        <li class="list-item"><details><summary>Import 3 <button class="edit-btn">✏️</button></summary></details></li>
-        <!-- usw. -->
-      </ul>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <p>Hallo, Prof. Altmeyer</p>
+    <div class="search-box">
+      <input type="text" placeholder="Suchen…">
     </div>
-
-    <div class="actions">
-      <div id="importCard" class="card">
-        <div class="icon">📂</div>
-        <div class="label">BibTeX Datei importieren</div>
-      </div>
-
-      <div class="card">
-        <div class="icon">📤</div>
-        <div class="label">Exportieren</div>
-      </div>
-    </div>
-
-    <div id="jsonOutput" style="display:none; white-space: pre-wrap; background:#f6f8fa; 
-    padding:10px; margin-top:20px; border:1px solid #ccc;"></div>
-
-
+    <ul class="list">
+      <li class="list-item"><details><summary>Import 1 <button class="edit-btn">✏️</button></summary></details></li>
+      <li class="list-item"><details><summary>Import 2 <button class="edit-btn">✏️</button></summary></details></li>
+      <li class="list-item"><details><summary>Import 3 <button class="edit-btn">✏️</button></summary></details></li>
+    </ul>
   </div>
 
+  <!-- Actions -->
+  <div class="actions">
+    <div id="importCard" class="card">
+      <div class="icon">📂</div>
+      <div class="label">BibTeX Datei importieren</div>
+    </div>
+
+    <div class="card">
+      <div class="icon">📤</div>
+      <div class="label">Exportieren</div>
+    </div>
+  </div>
+
+  <!-- React Zone -->
+  <div id="root" class="react-container" style="display: none;"></div>
+
+</div>
+
 <input type="file" id="bibInput" accept=".bib" style="display:none" />
-
-<script>
-
-  // Grab references
-  const importCard = document.getElementById('importCard');
-  const bibInput   = document.getElementById('bibInput');
-
-  // When the card is clicked, open the file picker
-  importCard.addEventListener('click', () => {
-    bibInput.click();
-  });
-
-  // When a file is selected, read & POST it
-  bibInput.addEventListener('change', async (evt) => {
-    const file = evt.target.files[0];
-    if (!file) return;
-    try {
-      const text = await file.text();
-      const resp = await fetch('http://localhost:3001/api/upload', {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
-        body: text
-      });
-      if (!resp.ok) throw new Error(resp.statusText);
-      const data = await resp.json();
-      const out = document.getElementById('jsonOutput');
-      
-      out.style.display = 'block';
-      out.textContent    = JSON.stringify(data, null, 2);
-
-    } catch (err) {
-      alert('Upload-Fehler: ' + err.message);
-    }
-  });
-</script>
-<div id="root"></div>
-
 </body>
 </html>

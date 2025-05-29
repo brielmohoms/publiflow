@@ -145,3 +145,99 @@ summary::-webkit-details-marker {
   color: #333;
 }
 
+.bibtex-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 3px 7px rgba(0,0,0,0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+  max-width: 600px;
+}
+
+.field-row {
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.field-label {
+  min-width: 120px;
+  font-weight: 600;
+  color: #333;
+  user-select: none;
+}
+
+.field-value {
+  flex: 1;
+  padding: 6px 10px;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #444;
+  transition: background-color 0.2s ease;
+}
+
+.field-value:hover {
+  background-color: #e6f0ff;
+}
+
+.edit-controls {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.edit-controls input,
+.edit-controls textarea {
+  flex: 1;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1.5px solid #ccc;
+  font-size: 1rem;
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color 0.3s ease;
+}
+
+.edit-controls input:focus,
+.edit-controls textarea:focus {
+  outline: none;
+  border-color: #0077ff;
+  box-shadow: 0 0 6px rgba(0, 119, 255, 0.3);
+}
+
+.btn {
+  font-size: 1.3rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  line-height: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  transition: background-color 0.3s ease;
+}
+
+.btn-save {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.btn-save:hover {
+  background-color: #449d48;
+}
+
+.btn-cancel {
+  background-color: #ff4d4d;
+  color: white;
+}
+
+.btn-cancel:hover {
+  background-color: #e64545;
+}

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
 const bibtexFields = [
-  "entryType", "citationKey", "author", "title", "journal", "booktitle", "year",
-  "volume", "number", "pages", "month", "note", "publisher", "editor",
-  "series", "address", "edition", "howpublished", "institution", "organization",
-  "school", "chapter", "type", "doi", "url", "isbn"
+  "address", "author", "booktitle", "chapter", "doi", "edition", "editor", "howpublished",
+  "institution", "isbn", "issn", "journal", "month", "note", "number", "organization",
+  "pages", "publisher", "school", "series", "title", "type", "url", "volume", "year",
+  "abstract", "annote", "crossref", "key", "language", "location", "pdf", "keywords"
 ];
 
 export default function BibtexEntryEditor({ entry, onSave }) {

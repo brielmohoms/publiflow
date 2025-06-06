@@ -26,28 +26,48 @@ export default function EntryListView({
 
         {entries.length > 0 && (
           <ul className={`list ${currentEntries.length < 5 ? 'few-items' : ''}`}>
-            {currentEntries.map((entry, index) => (
-              <li key={index} className="list-item">
-                <details>
-                  <summary>
-                    <span className="entry-title">{entry.title || `Eintrag ${index + 1}`}</span>
-                    <span className="chevron">▾</span>
-                  </summary>
-                  <div className="details-content">
-                    <BibtexEntryEditor entry={entry} onSave={handleSave} />
-                  </div>
-                </details>
-              </li>
-            ))}
+            {currentEntries.map((entry, index) => {
+              const stableKey =
+                entry.citationKey ||
+                entry.author + entry.year + entry.title + index;
+
+              return (
+                <li key={stableKey} className="list-item">
+                  <details>
+                    <summary>
+                      <span className="entry-title">
+                        {entry.title || `Eintrag ${index + 1}`}
+                      </span>
+                      <span className="chevron">▾</span>
+                    </summary>
+                    <div className="details-content">
+                      <BibtexEntryEditor entry={entry} onSave={handleSave} />
+                    </div>
+                  </details>
+                </li>
+              );
+            })}
           </ul>
         )}
 
         {/* Pagination Buttons */}
         {totalPages > 1 && (
           <div style={{ marginTop: '2rem', textAlign: 'center' }}>
-            <button disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)}>← Zurück</button>
-            <span style={{ margin: '0 1rem' }}>Seite {currentPage} von {totalPages}</span>
-            <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(p => p + 1)}>Weiter →</button>
+            <button
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage((p) => p - 1)}
+            >
+              ← Zurück
+            </button>
+            <span style={{ margin: '0 1rem' }}>
+              Seite {currentPage} von {totalPages}
+            </span>
+            <button
+              disabled={currentPage === totalPages}
+              onClick={() => setCurrentPage((p) => p + 1)}
+            >
+              Weiter →
+            </button>
           </div>
         )}
       </div>
@@ -66,4 +86,5 @@ export default function EntryListView({
       </div>
     </div>
   );
+
 }

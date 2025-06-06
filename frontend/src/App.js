@@ -1,72 +1,44 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import BibUploader from './components/BibUploader';
 import BibtexEntryEditor from './components/BibtexEntryEditor';
+import EntryListView from './components/EntryListView';
 
-function App() {
-  // Zustand für die importierten BibTeX Einträge
+const ITEMS_PER_PAGE = 5;
+
+export default function App() {
   const [entries, setEntries] = useState([]);
-  // Zustand, um den Upload-Bereich anzuzeigen
-  const [showUploader, setShowUploader] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  // useEffect für das Setup der Klick-Listener auf die Import-Karte
-  useEffect(() => {
-    const importCard = document.getElementById('importCard');
-    const input = document.getElementById('bibInput');
-
-    // Falls Elemente nicht gefunden werden, nichts machen
-    if (!importCard || !input) return;
-
-    // Funktion, die beim Klick auf die Import-Karte ausgeführt wird
-    const onClick = () => {
-      setShowUploader(true);
-      input.value = '';  // wichtig: Wert zurücksetzen, um erneutes Laden desselben Datei zu erzwingen
-      input.click();     // Öffnet den Dateiauswahl-Dialog
-    };
-
-    // EventListener für Klick hinzufügen
-    importCard.addEventListener('click', onClick);
-
-    // Cleanup-Funktion zum Entfernen des EventListeners beim Unmount
-    return () => {
-      importCard.removeEventListener('click', onClick);
-    };
-  }, []);
-
-  // Funktion, die aufgerufen wird, wenn die BibTeX Daten geparsed wurden
+  // Wird aufgerufen, wenn eine .bib-Datei erfolgreich geparsed wurde
   const handleParsed = (parsedEntries) => {
     setEntries(parsedEntries);
-
-    // Zeige den React Root Container an, nachdem eine Datei importiert wurde
-    const rootEl = document.getElementById('root');
-    if (rootEl) {
-      rootEl.style.display = 'block';
-    }
+    setCurrentPage(1); // zurück zur ersten Seite
   };
 
-  // Funktion zum Speichern einer geänderten BibTeX-Eintragung
+  // Speichert aktualisierte Felder eines Eintrags
   const handleSave = (updatedEntry) => {
-    setEntries((prevEntries) =>
-      prevEntries.map((entry) =>
+    setEntries(prevEntries =>
+      prevEntries.map(entry =>
         entry.citationKey === updatedEntry.citationKey ? updatedEntry : entry
       )
     );
   };
 
+  // Pagination: aktuelle Seite filtern
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const currentEntries = entries.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(entries.length / ITEMS_PER_PAGE);
+
   return (
-    <div className="App">
-      {/* Zeige den Uploader nur, wenn showUploader true ist */}
-      {showUploader && <BibUploader onParsed={handleParsed} />}
-      {/* Liste aller Einträge anzeigen, jeweils mit Editor */}
-      {entries.map((entry) => (
-        <BibtexEntryEditor
-          key={entry.citationKey || entry.id}
-          entry={entry}
-          onSave={handleSave}
-        />
-      ))}
-    </div>
+    <EntryListView
+      entries={entries}
+      currentEntries={currentEntries}
+      currentPage={currentPage}
+      totalPages={totalPages}
+      setCurrentPage={setCurrentPage}
+      handleSave={handleSave}
+      handleParsed={handleParsed}
+    />
   );
 }
-
-export default App;

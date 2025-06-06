@@ -1,250 +1,27 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Publikationen</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
+    html, body {
       margin: 0;
-      height: 100vh;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
       background: #ddd;
       font-family: Arial, sans-serif;
     }
-
-    .container {
-      display: flex;
+    #root {
       height: 100%;
-      padding: 20px;
-    }
-
-    .sidebar {
-      flex: 1;
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .sidebar p {
-      margin: 0 0 15px;
-      color: #555;
-    }
-
-    .search-box input {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      margin-bottom: 15px;
-    }
-
-    .list {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      overflow-y: auto;
-      flex: 1;
-    }
-
-    .list-item {
-      margin-bottom: 10px;
-    }
-
-    details {
-      border: 1px solid #eee;
-      border-radius: 4px;
-      background: #fafafa;
-    }
-
-    summary {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px;
-      cursor: pointer;
-      font-weight: bold;
-      list-style: none;
-    }
-
-    summary::-webkit-details-marker {
-      display: none;
-    }
-
-    .edit-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 1em;
-    }
-
-    .details-content {
-      padding: 10px;
-      background: #fff;
-      border-top: 1px solid #eee;
-    }
-
-    .details-content form label {
-      display: block;
-      margin: 8px 0 4px;
-      font-weight: bold;
-    }
-
-    .details-content form input,
-    .details-content form select,
-    .details-content form textarea {
-      width: 100%;
-      padding: 6px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      margin-bottom: 10px;
-      font: inherit;
-    }
-
-    .actions {
-      width: 200px;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      margin-left: 20px;
-    }
-
-    .card {
-      flex: 1;
-      background: #fff;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 20px;
-      cursor: pointer;
-      transition: box-shadow 0.2s;
-    }
-
-    .card:hover {
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-    }
-
-    .card .icon {
-      font-size: 2em;
-      margin-bottom: 10px;
-    }
-
-    .card .label {
-      font-size: 0.9em;
-      color: #333;
-    }
-
-    /* Zone React container */
-    .react-container {
-      flex: 2;
-      margin-left: 20px;
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      overflow-y: auto;
+      overflow: hidden;
     }
   </style>
+  <link rel="stylesheet" href="App.css" />
 </head>
-
 <body>
-<div class="container">
-
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <p>Hallo, Prof. Altmeyer</p>
-    <div class="search-box">
-      <input type="text" placeholder="Suchen…">
-    </div>
-    <ul class="list">
-      <li class="list-item"><details><summary>Import 1 <button class="edit-btn">✏️</button></summary></details></li>
-      <li class="list-item"><details><summary>Import 2 <button class="edit-btn">✏️</button></summary></details></li>
-      <li class="list-item"><details><summary>Import 3 <button class="edit-btn">✏️</button></summary></details></li>
-    </ul>
-  </div>
-
-  <!-- Actions -->
-  <div class="actions">
-    <div id="importCard" class="card">
-      <div class="icon">📂</div>
-      <div class="label">BibTeX Datei importieren</div>
-    </div>
-
-    <div class="card">
-      <div class="icon">📤</div>
-      <div class="label">Exportieren</div>
-    </div>
-  </div>
-
-  <!-- React Zone -->
-  <div id="root" class="react-container" style="display: none;"></div>
-
-</div>
-
-<input type="file" id="bibInput" accept=".bib" style="display:none" />
-
-<script>
-  const formHTML = `
-    <div class="details-content">
-      <form>
-        <label>Kommentar</label>
-        <textarea rows="2"></textarea>
-
-        <label>Nachname</label>
-        <input type="text" placeholder="Nachname" />
-
-        <label>Vorname</label>
-        <input type="text" placeholder="Vorname" />
-
-        <label>E-Mail-Adresse</label>
-        <input type="email" placeholder="email@example.com" />
-
-        <label>Sprache</label>
-        <select>
-          <option>Deutsch</option>
-          <option>Englisch</option>
-          <option>Andere</option>
-        </select>
-
-        <label>Haupttitel</label>
-        <input type="text" placeholder="Titel" />
-
-        <label>Abstract</label>
-        <textarea rows="3"></textarea>
-
-        <label>Autor*innen</label>
-        <input type="text" placeholder="z. B. Meyer, Max" />
-
-        <label>Jahr der Fertigstellung</label>
-        <input type="text" placeholder="JJJJ" />
-
-        <label>Datum Online-Veröffentlichung</label>
-        <input type="date" />
-
-        <label>Institution</label>
-        <input type="text" placeholder="Institution" />
-
-        <label>Seitenzahl</label>
-        <input type="number" placeholder="Seitenzahl" />
-      </form>
-    </div>
-  `;
-
-  document.querySelectorAll('.list-item details').forEach(details => {
-    details.addEventListener('toggle', () => {
-      if (details.open && !details.querySelector('.details-content')) {
-        details.insertAdjacentHTML('beforeend', formHTML);
-      }
-    });
-  });
-</script>
+<div id="root"></div>
+<input type="file" id="bibInput" accept=".bib" style="display: none;" />
 </body>
 </html>

@@ -15,8 +15,12 @@ body {
   height: 100vh;
   width: 100vw;
   padding: 20px;
+  gap: 20px;
   box-sizing: border-box;
+  overflow: hidden;
+  max-height: 100vh;
 }
+
 
 
 .sidebar {
@@ -65,14 +69,19 @@ details {
 }
 
 summary {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #f5f5f5;
+  border-bottom: 1px solid #ddd;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
-  cursor: pointer;
+  padding: 15px 20px;
   font-weight: bold;
   list-style: none;
 }
+
 
 summary::-webkit-details-marker {
   display: none;
@@ -109,12 +118,17 @@ summary::-webkit-details-marker {
 }
 
 .actions {
-  width: 200px;
+  flex: 0 0 200px;
   display: flex;
   flex-direction: column;
   gap: 15px;
-  margin-left: 20px;
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  overflow: hidden;
+  min-height: 0;
 }
+
 
 .card {
   flex: 1;
@@ -240,4 +254,84 @@ summary::-webkit-details-marker {
 
 .btn-cancel:hover {
   background-color: #e64545;
+}
+
+.intro {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.intro h2 {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.instruction-list {
+  font-size: 1.2rem;
+  line-height: 2;
+  padding-left: 1.4em;
+  text-align: left;
+  list-style-type: disc;
+}
+
+
+.list {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  min-height: 450px;
+}
+
+.list-item {
+  margin-bottom: 25px;
+}
+
+.list-item summary {
+  font-size: 1.2rem;
+  background-color: #f5f5f5;
+  border-radius: 6px;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-weight: bold;
+  list-style: none;
+}
+
+.entry-title {
+  flex-grow: 1;
+  text-align: left;
+}
+
+.chevron {
+  font-size: 1.2rem;
+  margin-left: 15px;
+  transform: rotate(0deg);
+  transition: transform 0.3s ease;
+}
+
+details[open] summary .chevron {
+  transform: rotate(180deg);
+}
+
+
+.list.few-items {
+  justify-content: flex-start;
+  min-height: 250px;
+}
+
+.list.few-items .list-item {
+  margin-bottom: 15px;
+}
+
+.bibtex-editor-inside-details {
+  padding: 20px;
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  margin-top: -1px;
+  box-sizing: border-box;
 }

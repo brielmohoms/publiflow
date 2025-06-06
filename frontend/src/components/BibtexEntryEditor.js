@@ -31,7 +31,7 @@ export default function BibtexEntryEditor({ entry, onSave }) {
   };
 
   return (
-    <div className="bibtex-card">
+    <div className="bibtex-editor-inside-details">
       {bibtexFields.map((field) => (
         <div key={field} className="field-row">
           <label className="field-label">{field}:</label>
@@ -39,7 +39,6 @@ export default function BibtexEntryEditor({ entry, onSave }) {
           {editingField === field ? (
             <div className="edit-controls">
               {(field === 'title' || field === 'note') ? (
-                // Mehrzeiliges Textfeld für längere Texte
                 <textarea
                   name={field}
                   value={formData[field] || ''}
@@ -48,7 +47,6 @@ export default function BibtexEntryEditor({ entry, onSave }) {
                   autoFocus
                 />
               ) : (
-                // Eingabefeld für einfache einzeilige Texte
                 <input
                   type="text"
                   name={field}
@@ -57,13 +55,10 @@ export default function BibtexEntryEditor({ entry, onSave }) {
                   autoFocus
                 />
               )}
-              {/* Speichern-Button */}
               <button className="btn btn-save" onClick={() => saveField(field)}>✓</button>
-              {/* Abbrechen-Button */}
               <button className="btn btn-cancel" onClick={stopEditing}>×</button>
             </div>
           ) : (
-            // Anzeige des Werts, Klick zum Bearbeiten
             <span className="field-value" onClick={() => startEditing(field)}>
               {formData[field] && formData[field].trim() !== '' ? formData[field] : '[leer]'}
             </span>
@@ -72,4 +67,5 @@ export default function BibtexEntryEditor({ entry, onSave }) {
       ))}
     </div>
   );
+
 }

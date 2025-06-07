@@ -1,30 +1,22 @@
 import React, { useState } from 'react';
 
-const bibtexFields = [
-  "address", "author", "booktitle", "chapter", "doi", "edition", "editor", "howpublished",
-  "institution", "isbn", "issn", "journal", "month", "note", "number", "organization",
-  "pages", "publisher", "school", "series", "title", "type", "url", "volume", "year",
-  "abstract", "annote", "crossref", "key", "language", "location", "pdf", "keywords"
-];
+const bibtexFields = ["author", "editor", "title", "booktitle", "abstract", 
+  "year", "month", "language", "publisher", "address", 
+  "institution", "pages", "keywords", "type", "note"];
+
 
 export default function BibtexEntryEditor({ entry, onSave }) {
-  // Zustand für die Formular-Daten initialisiert mit dem übergebenen Eintrag
   const [formData, setFormData] = useState(entry);
-  // Zustand für das aktuell bearbeitete Feld (null = keines)
   const [editingField, setEditingField] = useState(null);
 
-  // Funktion zum Aktualisieren des Formular-States bei Eingabeänderungen
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  // Bearbeitung eines Feldes starten
   const startEditing = (field) => setEditingField(field);
-  // Bearbeitung beenden
   const stopEditing = () => setEditingField(null);
 
-  // Feld speichern, Änderungen weitergeben und Bearbeitung beenden
   const saveField = (field) => {
     onSave(formData);
     stopEditing();
@@ -35,7 +27,6 @@ export default function BibtexEntryEditor({ entry, onSave }) {
       {bibtexFields.map((field) => (
         <div key={field} className="field-row">
           <label className="field-label">{field}:</label>
-
           {editingField === field ? (
             <div className="edit-controls">
               {(field === 'title' || field === 'note') ? (
@@ -67,5 +58,4 @@ export default function BibtexEntryEditor({ entry, onSave }) {
       ))}
     </div>
   );
-
 }

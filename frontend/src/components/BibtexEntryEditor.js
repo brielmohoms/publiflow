@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 
-const bibtexFields = ["author", "editor", "title", "booktitle", "abstract", 
-  "year", "month", "language", "publisher", "address", 
-  "institution", "pages", "keywords", "type", "note"];
+const bibtexFields = ["Dokumenttyp", "Autor*innen","Sprache der Veröffentlichung",
+  "Titel",  "Zusammenfassung", "Jahr der Fertigstellung", "Monat der Veröffentlichung",
+  "Veröffentlichende Institution", "Seitenanzahl","Verlag",
+  "Verlagsort","Titel des übergeordneten Werkes","Herausgeber*innen","Schlagwörter","Kommentar","URL",
+  "PDF", "DOI"];
 
 
 export default function BibtexEntryEditor({ entry, onSave }) {

@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 
-const bibtexFields = ["Dokumenttyp", "Autor*innen","Sprache der Veröffentlichung",
-  "Titel",  "Abstract", "Jahr der Fertigstellung", "Monat der Veröffentlichung",
-  "Veröffentlichende Institution", "Seitenanzahl","Verlag",
-  "Verlagsort","Titel des übergeordneten Werkes","Herausgeber*innen","Schlagwörter","Kommentar","URL",
-  "PDF", "DOI"];
-
+const bibtexFields = [
+  "type", "title", "language", "summary", "author", "year", "date", "institution",
+  "number of pages", "publisher", "location", "titel of the parent work", "date of first publication", "editors", 
+  "keywords", "volume", "doi", "isbn"
+];
 
 export default function BibtexEntryEditor({ entry, onSave }) {
   const [formData, setFormData] = useState(entry);

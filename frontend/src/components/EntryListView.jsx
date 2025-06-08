@@ -1,6 +1,6 @@
-import React from 'react';
-import BibUploader from './BibUploader';
-import BibtexEntryEditor from './BibtexEntryEditor';
+import React from "react";
+import BibUploader from "./BibUploader";
+import BibtexEntryEditor from "./BibtexEntryEditor";
 
 export default function EntryListView({
   entries,
@@ -9,7 +9,8 @@ export default function EntryListView({
   totalPages,
   setCurrentPage,
   handleSave,
-  handleParsed
+  handlePersist,
+  handleParsed,
 }) {
   return (
     <div className="container">
@@ -18,14 +19,19 @@ export default function EntryListView({
         <div className="intro">
           <h2>Willkommen</h2>
           <ul className="instruction-list">
-            <li>Klicken Sie auf <em>„BibTeX Datei importieren“</em>, um eine Datei auszuwählen.</li>
+            <li>
+              Klicken Sie auf <em>„BibTeX Datei importieren“</em>, um eine Datei
+              auszuwählen.
+            </li>
             <li>Die Einträge erscheinen unten nach dem Import.</li>
             <li>Sie können bearbeitet und anschließend exportiert werden.</li>
           </ul>
         </div>
 
         {entries.length > 0 && (
-          <ul className={`list ${currentEntries.length < 5 ? 'few-items' : ''}`}>
+          <ul
+            className={`list ${currentEntries.length < 5 ? "few-items" : ""}`}
+          >
             {currentEntries.map((entry, index) => {
               const stableKey =
                 entry.citationKey ||
@@ -52,14 +58,14 @@ export default function EntryListView({
 
         {/* Pagination Buttons */}
         {totalPages > 1 && (
-          <div style={{ marginTop: '2rem', textAlign: 'center' }}>
+          <div style={{ marginTop: "2rem", textAlign: "center" }}>
             <button
               disabled={currentPage === 1}
               onClick={() => setCurrentPage((p) => p - 1)}
             >
               ← Zurück
             </button>
-            <span style={{ margin: '0 1rem' }}>
+            <span style={{ margin: "0 1rem" }}>
               Seite {currentPage} von {totalPages}
             </span>
             <button
@@ -82,9 +88,11 @@ export default function EntryListView({
           <div className="icon">📤</div>
           <div className="label">Exportieren</div>
         </div>
+        <div className="card save-card" onClick={handlePersist}>
+          Speichern
+        </div>
         <BibUploader onParsed={handleParsed} />
       </div>
     </div>
   );
-
 }

@@ -129,6 +129,18 @@ summary::-webkit-details-marker {
   min-height: 0;
 }
 
+.actions .save-card {            
+  flex: 0 0 50px !important;    
+  padding: 0.75rem 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.actions .card:not(.save-card) { /* import & export only            */
+  flex: 1 1 0;                   
+  min-height: 200px;             
+}
 
 .card {
   flex: 1;

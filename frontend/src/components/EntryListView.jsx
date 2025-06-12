@@ -1,17 +1,54 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
+import { FiTrash2, FiUpload } from "react-icons/fi";
 import BibUploader from "./BibUploader";
 import BibtexEntryEditor from "./BibtexEntryEditor";
 
 export default function EntryListView({
   entries,
-  currentEntries,
   currentPage,
-  totalPages,
   setCurrentPage,
   handleSave,
+  handleDelete,
   handlePersist,
   handleParsed,
 }) {
+
+  const [query, setQuery] = useState("");
+
+  const filteredEntries = query
+    ? entries.filter((e) => {
+        const hay =
+          (e.title || "") + " " + (e.citationKey || "") + " " + (e.author || "");
+        return hay.toLowerCase().includes(query.toLowerCase());
+      })
+    : entries; 
+
+  function calcPerPage() {
+    const w = window.innerWidth;
+    if (w < 600)  return 2;   // phones
+    if (w < 900)  return 3;   // small tablets / narrow windows
+    if (w < 2000) return 4;
+    return 6;                 // desktops and large tablets
+  }
+
+  const [perPage, setPerPage] = useState(calcPerPage());
+  
+  useEffect(() => {
+    const onResize = () => setPerPage(calcPerPage());
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  const totalPages = Math.max(1, Math.ceil(filteredEntries.length / perPage));
+  const pageSlice  = filteredEntries.slice(
+    (currentPage - 1) * perPage,
+    currentPage * perPage
+  );
+
+  useEffect(() => {
+    if (currentPage > totalPages) setCurrentPage(totalPages);
+  }, [currentPage, totalPages, setCurrentPage]);
+
   return (
     <div className="container">
       {/* Linke Seite mit Anleitung und Liste */}
@@ -28,24 +65,47 @@ export default function EntryListView({
           </ul>
         </div>
 
-        {entries.length > 0 && (
+        <input
+          type="text"
+          className="search-input"
+          placeholder="Suchen …"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          style={{ margin: "0 0 1rem", height: "40px", width: "100%" }}
+        />
+
+        {pageSlice.length > 0 && (
           <ul
-            className={`list ${currentEntries.length < 5 ? "few-items" : ""}`}
+            className={`list ${pageSlice.length < 5 ? "few-items" : ""}`}
           >
-            {currentEntries.map((entry, index) => {
+            {pageSlice.map((entry, index) => {
               const stableKey =
                 entry.citationKey ||
-                entry.author + entry.year + entry.title + index;
+                (entry.author ?? "") + (entry.year ?? "") + (entry.title ?? "") + index;
 
               return (
                 <li key={stableKey} className="list-item">
                   <details>
-                    <summary>
+                    <summary className="entry-summary">
                       <span className="entry-title">
                         {entry.title || `Eintrag ${index + 1}`}
                       </span>
+
+                      {/* delete button */}
+                      <button
+                        className="trash-btn"
+                        title="Eintrag löschen"
+                        onClick={(e) => {
+                          e.stopPropagation();  
+                          handleDelete(entry.id);   
+                        }}
+                      >
+                        <FiTrash2 size={16} aria-label="Eintrag löschen" />
+                      </button>
+
                       <span className="chevron">▾</span>
                     </summary>
+
                     <div className="details-content">
                       <BibtexEntryEditor entry={entry} onSave={handleSave} />
                     </div>
@@ -85,7 +145,7 @@ export default function EntryListView({
           <div className="label">BibTeX Datei importieren</div>
         </div>
         <div className="card">
-          <div className="icon">📤</div>
+          <FiUpload className="icon" size={28} />
           <div className="label">Exportieren</div>
         </div>
         <div className="card save-card" onClick={handlePersist}>

@@ -3,62 +3,68 @@ import { nanoid } from "nanoid";
 import "./App.css";
 import EntryListView from "./components/EntryListView";
 
-const ITEMS_PER_PAGE = 5;
 const STORAGE_KEY = "bibtex-entries";
 
 export default function App() {
-  const [entries, setEntries] = useState(() => {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
-  });
+  const [entries, setEntries] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
-  }, [entries]);
+    const cached = localStorage.getItem(STORAGE_KEY);
+    if (cached) {
+      try {
+        setEntries(JSON.parse(cached));
+      } catch {
+        console.warn("Corrupt cache – ignoring it.");
+      }
+    }
+  }, []);
 
   // Wird aufgerufen, wenn eine .bib-Datei erfolgreich geparsed wurde
   const handleParsed = (parsedEntries) => {
     if (parsedEntries.length === 0) return;
 
-    const newEntries =
-      parsedEntries.map(e => ({
-        ...e,
-        id: nanoid(),            // new unique token
-      }));
-    setEntries(prev => [...prev, ...newEntries]);
+    const newEntries = parsedEntries.map((e) => ({
+      ...e,
+      id: nanoid(), // new unique token
+    }));
+    setEntries((prev) => [...prev, ...newEntries]);
 
     setCurrentPage(1); // zurück zur ersten Seite
   };
 
   // Speichert aktualisierte Felder eines Eintrags
   const handleSave = (updatedEntry) => {
-    setEntries((prevEntries) =>
-      prevEntries.map((entry) =>
-        entry.id === updatedEntry.id ? updatedEntry : entry
-      )
+    setEntries((prev) =>
+      prev.map((e) => (e.id === updatedEntry.id ? updatedEntry : e))
     );
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
   };
 
-  // Speichert ALLE Einträge manuell (Speichern-Button)
+  // Speichert ALLE Einträge (Speichern-Button)
   const handlePersistClick = () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
     alert("Gespeichert! ✓");
   };
 
-  // Pagination: aktuelle Seite filtern
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const currentEntries = entries.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-  const totalPages = Math.ceil(entries.length / ITEMS_PER_PAGE);
+  const handleDelete = (id) => {
+    setEntries((prev) => {
+      const next = prev.filter((e) => e.id !== id);
+
+      setCurrentPage((p) =>
+        Math.min(p, Math.max(1, Math.ceil(next.length / 5)))
+      );
+      return next;
+    });
+  };
 
   return (
     <EntryListView
       entries={entries}
-      currentEntries={currentEntries}
       currentPage={currentPage}
-      totalPages={totalPages}
       setCurrentPage={setCurrentPage}
       handleSave={handleSave}
+      handleDelete={handleDelete}
       handlePersist={handlePersistClick}
       handleParsed={handleParsed}
     />

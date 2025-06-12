@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { FiCheck, FiX } from "react-icons/fi";
 
 const bibtexFields = [
   "title",
@@ -22,6 +23,7 @@ const bibtexFields = [
 ];
 
 export default function BibtexEntryEditor({ entry, onSave }) {
+
   const [formData, setFormData] = useState(entry);
   const [editingField, setEditingField] = useState(null);
 
@@ -30,8 +32,11 @@ export default function BibtexEntryEditor({ entry, onSave }) {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const startEditing = (field) => setEditingField(field);
-  const stopEditing = () => setEditingField(null);
+  const startEditing = (field) => 
+    setEditingField(field);
+
+  const stopEditing = () => 
+    setEditingField(null);
 
   const saveField = () => {
     onSave(formData);
@@ -56,7 +61,6 @@ export default function BibtexEntryEditor({ entry, onSave }) {
                   name={field}
                   value={formData[field]}
                   onChange={handleChange}
-                  rows={3}
                   autoFocus
                 />
               ) : (
@@ -68,11 +72,13 @@ export default function BibtexEntryEditor({ entry, onSave }) {
                   autoFocus
                 />
               )}
+
               <button className="btn btn-save" onClick={() => saveField(field)}>
-                ✓
+                <FiCheck size={16} aria-label="Speichern" />
               </button>
+
               <button className="btn btn-cancel" onClick={stopEditing}>
-                ×
+                <FiX size={16} aria-label="Abbrechen" />
               </button>
             </div>
           ) : (

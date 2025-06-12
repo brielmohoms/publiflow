@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { nanoid } from "nanoid";
 import "./App.css";
-import BibUploader from "./components/BibUploader";
-import BibtexEntryEditor from "./components/BibtexEntryEditor";
 import EntryListView from "./components/EntryListView";
 
 const ITEMS_PER_PAGE = 5;
@@ -21,12 +19,15 @@ export default function App() {
 
   // Wird aufgerufen, wenn eine .bib-Datei erfolgreich geparsed wurde
   const handleParsed = (parsedEntries) => {
-    setEntries(
+    if (parsedEntries.length === 0) return;
+
+    const newEntries =
       parsedEntries.map(e => ({
         ...e,
-        id: nanoid(),            // ← brand-new unique token
-      }))
-    );
+        id: nanoid(),            // new unique token
+      }));
+    setEntries(prev => [...prev, ...newEntries]);
+
     setCurrentPage(1); // zurück zur ersten Seite
   };
 
@@ -39,7 +40,7 @@ export default function App() {
     );
   };
 
-  // Speichert ALLE Einträge manuell (Speichern-Button) -----------------
+  // Speichert ALLE Einträge manuell (Speichern-Button)
   const handlePersistClick = () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
     alert("Gespeichert! ✓");

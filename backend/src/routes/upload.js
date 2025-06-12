@@ -3,9 +3,6 @@ const router = require('express').Router();
 
 const parserService = require('../services/parserservice');
 
-
-
-
 // POST /api/upload
 router.post('/upload', async (req, res, next) => {
   try {

@@ -80,7 +80,6 @@ summary {
   list-style: none;
 }
 
-
 summary::-webkit-details-marker {
   display: none;
 }
@@ -126,24 +125,6 @@ summary::-webkit-details-marker {
   overflow: hidden;
   min-height: 0;
 }
-
-.actions .save-card {            
-  flex: 0 0 50px !important;    
-  padding: 0.75rem 0.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  
-}
-
-.actions .card:not(.save-card) { /* import & export only            */
-  flex: 1 1 0;                   
-  min-height: 200px;             
-}
-
-.actions { gap: 0; }
-
-.actions .card:not(.save-card) { margin-bottom: 15px; }
 
 .card {
   flex: 1;
@@ -210,6 +191,57 @@ summary::-webkit-details-marker {
 
 .field-value:hover {
   background-color: #e6f0ff;
+}
+
+.search-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.search-row .search-input {
+  flex: 1;            
+  margin-bottom: 0;  
+  height: 40px;       
+}
+
+.search-input {
+  padding: 8px 10px;
+  font-size: 1rem;
+  border: 2px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.search-input:focus {
+  outline: none;                 
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15); 
+}
+
+.saveCard,
+.deleteCard {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+  margin-left: 0.5rem;
+}
+
+.saveCard:hover,
+.deleteCard:hover {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.saveCard .icon,
+.deleteCard .icon {
+  font-size: 1.2em;
+  margin: 0;
 }
 
 .edit-controls {
@@ -336,18 +368,5 @@ details[open] summary .chevron {
   border-bottom-right-radius: 6px;
   margin-top: -1px;
   box-sizing: border-box;
-}
-
-.search-input {
-  padding: 8px 10px;
-  font-size: 1rem;
-  border: 2px solid #ccc;
-  border-radius: 6px;
-  margin-bottom: 10px;
-}
-
-.search-input:focus {
-  outline: none;                 /* kills the browser’s ring   */
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15); /* soft glow – optional       */
 }
 

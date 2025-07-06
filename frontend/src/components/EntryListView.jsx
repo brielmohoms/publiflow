@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from "react";
-import { FiTrash2, FiUpload } from "react-icons/fi";
+import React, { useState, useEffect } from "react";
+import { FiSave, FiTrash2, FiUpload } from "react-icons/fi";
 import BibUploader from "./BibUploader";
 import BibtexEntryEditor from "./BibtexEntryEditor";
 
@@ -9,30 +9,34 @@ export default function EntryListView({
   setCurrentPage,
   handleSave,
   handleDelete,
+  handleDeleteAll,
   handlePersist,
   handleParsed,
 }) {
-
   const [query, setQuery] = useState("");
 
   const filteredEntries = query
     ? entries.filter((e) => {
         const hay =
-          (e.title || "") + " " + (e.citationKey || "") + " " + (e.author || "");
+          (e.title || "") +
+          " " +
+          (e.citationKey || "") +
+          " " +
+          (e.author || "");
         return hay.toLowerCase().includes(query.toLowerCase());
       })
-    : entries; 
+    : entries;
 
   function calcPerPage() {
     const w = window.innerWidth;
-    if (w < 600)  return 2;   // phones
-    if (w < 900)  return 3;   // small tablets / narrow windows
+    if (w < 600) return 2; // phones
+    if (w < 900) return 3; // small tablets / narrow windows
     if (w < 2000) return 4;
-    return 6;                 // desktops and large tablets
+    return 6; // desktops and large tablets
   }
 
   const [perPage, setPerPage] = useState(calcPerPage());
-  
+
   useEffect(() => {
     const onResize = () => setPerPage(calcPerPage());
     window.addEventListener("resize", onResize);
@@ -40,7 +44,7 @@ export default function EntryListView({
   }, []);
 
   const totalPages = Math.max(1, Math.ceil(filteredEntries.length / perPage));
-  const pageSlice  = filteredEntries.slice(
+  const pageSlice = filteredEntries.slice(
     (currentPage - 1) * perPage,
     currentPage * perPage
   );
@@ -65,23 +69,40 @@ export default function EntryListView({
           </ul>
         </div>
 
-        <input
-          type="text"
-          className="search-input"
-          placeholder="Suchen …"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          style={{ margin: "0 0 1rem", height: "40px", width: "100%" }}
-        />
-
-        {pageSlice.length > 0 && (
-          <ul
-            className={`list ${pageSlice.length < 5 ? "few-items" : ""}`}
+        <div className="search-row">
+          <input
+            type="text"
+            className="search-input"
+            placeholder="Suchen …"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+          {/* Löschen aller Einträge */}
+          <div
+            className="deleteCard"
+            onClick={handleDeleteAll}
+            title="Alle löschen"
           >
+            <FiTrash2 className="icon" size={20} />
+          </div>
+          {/* Speichern aller Einträge */}
+          <div
+            className="saveCard"
+            onClick={handlePersist}
+            title="Alle speichern"
+          >
+            <FiSave className="icon" size={20} />
+          </div>
+        </div>
+        {pageSlice.length > 0 && (
+          <ul className={`list ${pageSlice.length < 5 ? "few-items" : ""}`}>
             {pageSlice.map((entry, index) => {
               const stableKey =
                 entry.citationKey ||
-                (entry.author ?? "") + (entry.year ?? "") + (entry.title ?? "") + index;
+                (entry.author ?? "") +
+                  (entry.year ?? "") +
+                  (entry.title ?? "") +
+                  index;
 
               return (
                 <li key={stableKey} className="list-item">
@@ -96,8 +117,8 @@ export default function EntryListView({
                         className="trash-btn"
                         title="Eintrag löschen"
                         onClick={(e) => {
-                          e.stopPropagation();  
-                          handleDelete(entry.id);   
+                          e.stopPropagation();
+                          handleDelete(entry.id);
                         }}
                       >
                         <FiTrash2 size={16} aria-label="Eintrag löschen" />
@@ -147,9 +168,6 @@ export default function EntryListView({
         <div className="card">
           <FiUpload className="icon" size={28} />
           <div className="label">Exportieren</div>
-        </div>
-        <div className="card save-card" onClick={handlePersist}>
-          Speichern
         </div>
         <BibUploader onParsed={handleParsed} />
       </div>

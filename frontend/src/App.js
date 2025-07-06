@@ -58,6 +58,19 @@ export default function App() {
     });
   };
 
+  const handleDeleteAll = () => {
+    if (!window.confirm("Möchtest du wirklich alle Einträge löschen?")) {
+      return;
+    }
+  
+    setEntries([]);
+    
+    setCurrentPage(1);
+    
+    localStorage.removeItem(STORAGE_KEY);
+
+  };
+
   return (
     <EntryListView
       entries={entries}
@@ -65,6 +78,7 @@ export default function App() {
       setCurrentPage={setCurrentPage}
       handleSave={handleSave}
       handleDelete={handleDelete}
+      handleDeleteAll={handleDeleteAll}
       handlePersist={handlePersistClick}
       handleParsed={handleParsed}
     />

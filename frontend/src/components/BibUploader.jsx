@@ -13,16 +13,20 @@ export default function BibUploader({ onParsed }) {
     try {
       // Datei als Text lesen
       const text = await file.text();
+
       // Upload an Backend via POST
       const res  = await fetch('http://localhost:3001/api/upload', {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain' },
         body: text
       });
+
       // Fehler werfen wenn Antwort nicht OK
       if (!res.ok) throw new Error(res.statusText);
+
       // Antwort JSON parsen
       const json = await res.json();
+      
       // Ergebnis nach oben geben
       onParsed(json);
     } catch (e) {

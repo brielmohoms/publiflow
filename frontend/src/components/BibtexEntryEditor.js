@@ -4,6 +4,7 @@ import { FiCheck, FiX } from "react-icons/fi";
 const bibtexFields = [
   "title",
   "language",
+  "booktitle",
   "summary",
   "author",
   "year",
@@ -43,10 +44,6 @@ export default function BibtexEntryEditor({ entry, onSave }) {
     stopEditing();
   };
 
-  /** const visibleFields = bibtexFields.filter((f) => {
-    const v = formData[f];
-    return v !== undefined && v !== null && String(v).trim() !== "";
-  });**/
   let visibleFields = bibtexFields.filter((f) => {
     if (f === "author") return false;
     const v = formData[f];
@@ -60,7 +57,6 @@ export default function BibtexEntryEditor({ entry, onSave }) {
       .split(/\s+and\s+/)
       .map((name) => name.trim());
   }
-
 
   return (
     <div className="bibtex-editor-inside-details">
@@ -102,7 +98,6 @@ export default function BibtexEntryEditor({ entry, onSave }) {
         </div>
       ))}
 
-      {/* Sonderbehandlung für das Feld "author" */}
       {formData.author &&
         formData.author
           .split(/\s+and\s+/)
@@ -146,5 +141,4 @@ export default function BibtexEntryEditor({ entry, onSave }) {
           })}
     </div>
   );
-
   }

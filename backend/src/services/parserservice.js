@@ -4,6 +4,7 @@ const { raw } = require("body-parser");
 const bibtexFields = [
   "title",
   "language",
+  "booktitle",
   "summary",
   "author",
   "year",
@@ -30,10 +31,11 @@ function safeAssign(obj, key, value) {
 
 module.exports = {
   parseBib: async (bibText) => {
+
     const rawEntries = bibtexParse.toJSON(bibText);
 
     return rawEntries.map((item, index) => {
-      // base object that always exists
+     
       const entry = {
         id: index + 1,
         type: item.entryType || "",

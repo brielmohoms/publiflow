@@ -2,7 +2,7 @@
 const express = require('express');
 const cors = require('cors');
 
-// load our routes
+// load routes
 const uploadRoute = require('./routes/upload');
 const entriesRoute = require('./routes/entries');
 
@@ -18,7 +18,7 @@ app.use(express.text({ type: 'text/plain', limit: '10mb' }));
 // für den JSON PUT (edit)
 app.use(express.json({ limit: '10mb' }));
 
-// Mount alle Routes
+// Mount all Routes
 app.use('/api', uploadRoute);
 app.use('/api', entriesRoute);
 

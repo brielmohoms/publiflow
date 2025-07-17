@@ -1,6 +1,5 @@
 // Load the BibTeX parser library
 const bibtexParse = require("bibtex-parse-js");
-const { raw } = require("body-parser");
 const bibtexFields = [
   "title",
   "language",

@@ -1,26 +1,24 @@
 const router = require('express').Router();
-//const parserService = require('../parserservice'); // oder keine Ahnung wie das heißt
-
 const parserService = require('../services/parserservice');
 
 // POST /api/upload
 router.post('/upload', async (req, res, next) => {
   try {
 
-    // takes a BibTex text from req.body
+    // nimmt einen BibTex-Text aus req.body
     const bibText = req.body;
 
-    // if it is empty or contains only whitespace, we throw an error
+    // wenn er leer ist oder nur Leerzeichen enthält, wird ein Fehler ausgegeben
     if (!bibText.trim()) {
       const err = new Error('Keine BibTeX-Daten gesendet');
       err.statusCode = 400;
       throw err;
     }
 
-    // delegate parsing to the parsingService (frontend)
+    // das parsing an den parsing service (Frontend) delegieren
     const entries = await parserService.parseBib(bibText);
 
-    // response and the JSON array of the parsed entries
+    // antwort und das JSON-Array der geparsten Einträge
     res.status(201).json(entries);
 
   } catch (err) {

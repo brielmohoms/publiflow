@@ -15,7 +15,6 @@ router.get('/entries/:id', (req, res) => {
   res.json(entry);
 });
 
-
 // PUT (edit) // erlaube das Speichern von Änderungen
 router.put('/entries/:id', (req, res) => {
   const id = Number(req.params.id);
@@ -23,8 +22,7 @@ router.put('/entries/:id', (req, res) => {
   if (!entry) return res.status(404).json({ error:'Nicht gefunden' });
   entry = { ...entry, ...req.body, id };
   entriesStore = entriesStore.map(e => e.id===id? entry : e);
-  res.json(entry);                       // geändertes Objekt zurück
+  res.json(entry); // geändertes Objekt zurück
 });
 
 module.exports = router;
-

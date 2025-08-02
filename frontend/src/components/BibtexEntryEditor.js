@@ -44,11 +44,16 @@ export default function BibtexEntryEditor({ entry, onSave }) {
     stopEditing();
   };
 
-  let visibleFields = bibtexFields.filter((f) => {
+  /*let visibleFields = bibtexFields.filter((f) => {
     if (f === "author") return false;
     const v = formData[f];
     return v !== undefined && v !== null && String(v).trim() !== "";
-  });
+  });*/
+  const hiddenFields = ["id", "type", "citationKey"];
+
+  let visibleFields = Object.keys(entry)
+    .filter(f => f !== "author" && !hiddenFields.includes(f));
+
 
   // Autoren einzeln hinzufügen, falls es mehrere gibt
   let authors = [];
@@ -70,7 +75,7 @@ export default function BibtexEntryEditor({ entry, onSave }) {
               {(field === "title" || field === "note") ? (
                 <textarea
                   name={field}
-                  value={formData[field]}
+                  value={formData[field] || ""}
                   onChange={handleChange}
                   autoFocus
                 />
@@ -78,7 +83,7 @@ export default function BibtexEntryEditor({ entry, onSave }) {
                 <input
                   type="text"
                   name={field}
-                  value={formData[field]}
+                  value={formData[field] || ""}
                   onChange={handleChange}
                   autoFocus
                 />

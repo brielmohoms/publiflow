@@ -3,6 +3,42 @@ import { FiSave, FiTrash2, FiUpload } from "react-icons/fi";
 import BibUploader from "./BibUploader";
 import BibtexEntryEditor from "./BibtexEntryEditor";
 
+
+function entriesToXML(entries) {
+  const escapeXML = (str) =>
+    str ? str.replace(/[<>&'"]/g, (c) => ({
+      '<': '&lt;',
+      '>': '&gt;',
+      '&': '&amp;',
+      "'": '&apos;',
+      '"': '&quot;',
+    }[c])) : '';
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<entries>
+${entries.map(entry => `
+  <entry>
+${Object.entries(entry).map(([key, value]) =>
+  key !== 'id' && value !== undefined
+    ? `    <${key}>${escapeXML(String(value))}</${key}>`
+    : ''
+).join('\n')}
+  </entry>
+`).join('\n')}
+</entries>`;
+}
+
+function handleExport(entries) {
+  const xmlContent = entriesToXML(entries);
+  const blob = new Blob([xmlContent], { type: "application/xml" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "entries.xml";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 export default function EntryListView({
   entries,
   currentPage,
@@ -165,8 +201,8 @@ export default function EntryListView({
           <div className="icon">📂</div>
           <div className="label">BibTeX Datei importieren</div>
         </div>
-        <div className="card">
-          <FiUpload className="icon" size={28} />
+        <div className="card"  onClick={() => handleExport(entries)}>
+          <FiUpload className="icon" size={28} title="Als XML exportieren" />
           <div className="label">Exportieren</div>
         </div>
         <BibUploader onParsed={handleParsed} />
